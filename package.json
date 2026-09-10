@@ -1,0 +1,45 @@
+{
+  "name": "dsh-browser-bsk",
+  "version": "0.1.0",
+  "description": "DSH 浏览器能力 seam（ctx.browser）的 bsk 后端：把本机 browser-skill 的 bsk CLI 包成 browser 服务，供 dsh-accounts/fill 等消费者注入。",
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "browser",
+    "bsk",
+    "browser-skill"
+  ],
+  "license": "MIT",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "bsk.js",
+    "cordis.patch.yml",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1",
+    "@deepseek-ai/schemastery": "^3.18.1"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "compatibility": {
+      "dsh": ">=0.1.1-rc.1 <0.2.0",
+      "profiles": [
+        "web"
+      ]
+    }
+  }
+}

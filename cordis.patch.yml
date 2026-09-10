@@ -1,0 +1,11 @@
+# dsh-browser-bsk bundle patch — listed in the profile's package.json bundles.
+#
+# Publishes the browser capability seam (`ctx.browser`) backed by the local
+# `bsk` CLI, so consumers that inject `browser` (e.g. `dsh-accounts/fill`)
+# activate in profiles where no Electron browser plugin is installed.
+#
+# Exactly one entry: the service. This plugin registers NO tools, so it never
+# collides with the browser-skill plugin's `browser_*` tool names.
+- insert:
+    - id: browser-bsk
+      name: dsh-browser-bsk
