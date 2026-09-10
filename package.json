@@ -21,6 +21,8 @@
     "index.js",
     "bsk.js",
     "cordis.patch.yml",
+    "e2e.mjs",
+    "e2e-challenge.mjs",
     "README.md",
     "LICENSE"
   ],

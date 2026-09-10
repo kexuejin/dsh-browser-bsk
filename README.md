@@ -76,6 +76,22 @@ node --test test/*.test.mjs
 
 测试用真实 cordis `Context` 挂载服务（覆盖 `super(ctx, 'browser')` 注册路径），CLI 调用全部走注入的假 runner，**不会启动真实浏览器会话，也不需要 daemon**。
 
+### 真实浏览器端到端（可选，会开一个 Agent Window）
+
+`e2e.mjs` 与 `e2e-challenge.mjs` 走真实 `bsk` daemon：前者在一个本地登录页上跑完 `open → listTabs → detectChallenge → setValue ×2 → click → 校验提交结果 → close`（就是 `dsh-accounts/fill` 的调用序列）；后者是验证码检测的正样本对照。
+
+```sh
+mkdir -p /tmp/logintest && cd /tmp/logintest && python3 -m http.server 8123 &
+node e2e.mjs            # 期望末尾打印 WELCOME alice
+node e2e-challenge.mjs  # 期望打印 markers: g-recaptcha / recaptcha/api.js / captcha / verify you are human
+```
+
+需要本目录下有指向 Harness 依赖的 `node_modules`：
+
+```sh
+ln -sfn ~/.dsh/profiles/node_modules node_modules   # 仅本地跑测试用，已被 .gitignore 忽略
+```
+
 ## 已知限制
 
 - 只实现上面那张表；seam 的其他方法（`navigate`/`snapshot`/`execute`/`screenshot`…）没有实现。有消费者需要时再加，而不是现在铺 stub。
