@@ -4,7 +4,7 @@
 
 ## 为什么需要它
 
-`dsh-accounts` 的代填入口 `dsh-accounts/fill` 声明了：
+有些插件把 `browser` 当作**可选**依赖，却写进了 `inject`。`dsh-accounts` 的代填入口就是一例：
 
 ```js
 export const inject = ['tools', 'credentials', 'browser']
@@ -17,9 +17,11 @@ Error: dsh: plugin tree failed to load: dsh: 1 entry did not activate
 dsh-accounts/fill: pending (waiting for service: browser)
 ```
 
-官方提供 `browser` 服务的是 `dsh-builtin-browser`（Electron + CDP + 33 个 `browser_*` 工具）。但如果你已经在用 `browser-skill`（`bsk` + 浏览器扩展，驱动你自己的浏览器），装它会撞车：两者都注册 `browser_session`，而工具注册表对重名直接抛错，`browser-skill` 的六个工具是一次整体注册，会**整组失效**。
+于是**装上这类插件、但机器上没有 `browser` 服务**的 profile 会直接起不来（上游已在 [issue #2](https://github.com/yangwuan55/dsh-accounts/issues/2) 记录，并在 [PR #3](https://github.com/yangwuan55/dsh-accounts/pull/3) 里改成运行时检测）。
 
-本插件提供第三条路：**只发布服务，不注册任何工具**。
+在两者都修好之前，本插件是一条立刻可用的路：**只发布 `browser` 服务，不注册任何工具**。
+
+社区里另一个提供 `browser` 服务的是 [`dsh-builtin-browser`](https://github.com/wqty123/dsh-browser)（npm 上的无 scope 包名，**第三方项目**，不是 DeepSeek 官方；自带 Electron + CDP 与 33 个 `browser_*` 工具）。但如果你已经在用 `browser-skill`（`bsk` + 浏览器扩展，驱动你自己的浏览器），装它会撞车：两者都注册 `browser_session`，而工具注册表对重名直接抛错，`browser-skill` 的六个工具是一次整体注册，会**整组失效**。
 
 | | 驱动 | 工具 | `ctx.browser` 服务 |
 |---|---|---|---|
